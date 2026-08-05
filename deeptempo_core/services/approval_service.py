@@ -121,7 +121,7 @@ class ApprovalService:
                 config_value = None
             
             if config_value:
-                self.force_manual_approval = config_value.get('enabled', False)
+                self.force_manual_approval = config_value.get('enabled', True)
                 logger.debug(f"Loaded approval config from database: force_manual_approval={self.force_manual_approval}")
                 return
             
@@ -129,14 +129,14 @@ class ApprovalService:
             if self.config_file.exists():
                 with open(self.config_file, 'r') as f:
                     config = json.load(f)
-                    self.force_manual_approval = config.get("force_manual_approval", False)
+                    self.force_manual_approval = config.get("force_manual_approval", True)
                     logger.debug(f"Loaded approval config from file: force_manual_approval={self.force_manual_approval}")
             else:
-                self.force_manual_approval = False
+                self.force_manual_approval = True
                 self._save_config()
         except Exception as e:
             logger.error(f"Error loading approval config: {e}")
-            self.force_manual_approval = False
+            self.force_manual_approval = True
     
     def _save_config(self):
         """Save approval configuration to database and file."""
